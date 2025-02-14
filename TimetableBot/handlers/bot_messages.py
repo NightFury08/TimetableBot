@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 
-from keyboards import reply, fabrics
+from keyboards import reply, inline, builders, fabrics
 
 router = Router()
 

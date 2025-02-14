@@ -26,6 +26,15 @@ async def note_name(message: Message, state: FSMContext):
     await message.answer("Выберите заметку:", reply_markup=fabrics.notes(user_id=message.from_user.id))
 
 
+
+# @router.message(wait_note_content.waiting_note_content)
+# async def note_name(message: Message, state: FSMContext):
+#     print(message.text)
+#     await state.clear()
+#     add_note(user_id=message.from_user.id, name="Fastnote", content=message.text)
+#     await message.answer("Выберите заметку:", reply_markup=fabrics.notes(user_id=message.from_user.id))
+
+
 @router.callback_query(fabrics.Pagination.filter(F.action.in_(["createtimetable"])))
 async def create_timetable(call: CallbackQuery, callback_data: fabrics.Pagination, state: FSMContext):
     await state.set_state(wait_timetable_name.waiting_timetable_name)
@@ -38,3 +47,12 @@ async def timetable_name(message: Message, state: FSMContext):
     await state.clear()
     add_timetable(user_id=message.from_user.id, name=message.text)
     await message.answer("Выберите расписание:", reply_markup=fabrics.timetables(user_id=message.from_user.id))
+
+
+# @router.message(Command("add_timetable"))
+# async def add_timetable(message: Message, state: FSMContext):
+#     await state.set_state(wait_timetable_name.waiting_timetable_name)
+#     await message.answer(
+#         "Введите название расписания:",
+#         reply_markup=fabrics.create_timetable()
+#     )

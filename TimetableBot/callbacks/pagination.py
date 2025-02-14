@@ -3,7 +3,7 @@ from contextlib import suppress
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from aiogram.exceptions import TelegramBadRequest
-
+from aiogram.enums import ParseMode
 from keyboards import fabrics
 
 from data.orm import select_note, delete_note, select_timetable, select_events
@@ -26,7 +26,7 @@ async def note_handler(call: CallbackQuery, callback_data: fabrics.Table):
 
 @router.callback_query(fabrics.Time_day.filter(F.dayweek.in_(["1", "2", "3", "4", "5", "6", "7"])))
 async def events_handler(call: CallbackQuery, callback_data: fabrics.Time_day):
-        await call.message.edit_text(select_events(user_id=callback_data.user_id, timetable_id=callback_data.timetable_id, weekday=callback_data.dayweek)[0][1])
+        await call.message.edit_text(f"{select_events(user_id=callback_data.user_id, timetable_id=callback_data.timetable_id, weekday=callback_data.dayweek)}", parse_mode=ParseMode.MARKDOWN_V2)
         await call.message.edit_reply_markup(reply_markup=fabrics.showday(user_id=callback_data.user_id, timetable_id=callback_data.timetable_id))
         
 
@@ -51,6 +51,7 @@ async def note_handler(call: CallbackQuery, callback_data: fabrics.Note):
 async def note_handler(call: CallbackQuery, callback_data: fabrics.Note):
     if callback_data.get == "delnote":
         delete_note(note_id=callback_data.id)
+        # await call.message.edit_text(select_note(note_id=callback_data.id)[0][2])
         await call.message.edit_reply_markup(reply_markup=fabrics.notes_remove(user_id=callback_data.user_id))
     
 

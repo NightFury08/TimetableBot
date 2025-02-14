@@ -9,6 +9,12 @@ def create_tables():
     # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     # engine.echo=True
+    
+def drop_tables():
+    engine.echo=False
+    Base.metadata.drop_all(engine)
+    # Base.metadata.create_all(engine)
+    # engine.echo=True
 
 
 def add_user(id: int, username: str):
@@ -110,7 +116,37 @@ def select_events(user_id: int, weekday: int, timetable_id: int):
         query = select(EventsOrm).where(EventsOrm.weekday == weekday, EventsOrm.timetable_id == timetable_id)
 
         results = session.execute(query).scalars().all()
-        day_events = [[day.id, day.name, day.time_start, day.time_end] for day in results]
-        print(day_events)
-        return day_events
- 
+        day_events = [[day.id, day.body, day.time_start, day.time_end] for day in results]
+        day_week_str = ">*День*\n"
+        match int(weekday):
+            case 1: day_week_str=">*Пн*\n"
+            case 2: day_week_str=">*Вт*\n"
+            case 3: day_week_str=">Ср*\n"
+            case 4: day_week_str=">*Чт*\n"
+            case 5: day_week_str=">*Пт*\n"
+            case 6: day_week_str=">*Сб*\n"
+            case 7: day_week_str=">*Вс*\n"
+        day_events_str = f"{day_week_str}"
+        for day in results:
+            day_events_str += f">{str(day.body)}\n>\n"
+        print(day_events_str)
+        return day_events_str
+    
+# def delete_day(weekday: str, id: int):
+#     with session_factory() as session:
+#         match weekday:
+#             case "monday":
+#                 session.query(MondayOrm).where(MondayOrm.id == id).delete()
+#             case "tuesday":
+#                 session.query(TuesdayOrm).where(TuesdayOrm.id == id).delete()
+#             case "wednesday":
+#                 session.query(WednesdayOrm).where(WednesdayOrm.id == id).delete()
+#             case "thursday":
+#                 session.query(ThursdayOrm).where(ThursdayOrm.id == id).delete()
+#             case "friday":
+#                 session.query(FridayOrm).where(FridayOrm.id == id).delete()
+#             case "saturday":
+#                 session.query(SaturdayOrm).where(SaturdayOrm.id == id).delete()
+#             case "sunday":
+#                 session.query(SundayOrm).where(SundayOrm.id == id).delete()
+#         session.commit()

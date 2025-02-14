@@ -1,3 +1,5 @@
+from conf import TOKEN
+
 import asyncio
 from aiogram import Bot, Dispatcher
 
@@ -8,7 +10,7 @@ from data.orm import create_tables
 create_tables()
 
 async def main():
-    bot = Bot("TOKEN")
+    bot = Bot(TOKEN)
     dp = Dispatcher()
 
     dp.include_routers(

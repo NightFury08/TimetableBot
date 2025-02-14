@@ -28,6 +28,13 @@ class Table(CallbackData, prefix="Table"):
     get: str
     id: int
     user_id: int
+    
+
+# class GetNoteTimetable(CallbackData, prefix="getnotetimetable"):
+#     get: str
+#     id: int
+#     user_id: int
+
 
 
 def timetable(user_id: int):
