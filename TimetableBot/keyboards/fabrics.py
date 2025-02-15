@@ -44,8 +44,8 @@ def timetable(user_id: int):
             action="timetables", user_id=user_id).pack()),
         InlineKeyboardButton(text="Создать", callback_data=Pagination(
             action="createtimetable", user_id=user_id).pack()),
-        InlineKeyboardButton(text="События сегодня", callback_data=Pagination(
-            action="eventstoday", user_id=user_id).pack())
+        # InlineKeyboardButton(text="События сегодня", callback_data=Pagination(
+        #     action="eventstoday", user_id=user_id).pack())
     )
     builder.adjust(1,1,1)
     return builder.as_markup()

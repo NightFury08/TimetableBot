@@ -103,8 +103,8 @@ def delete_timetable(timetable_id: int):
         session.commit()
 
 
-def add_event(weekday:int, user_id:int, timetable_id: int, name: str, time_start: time, time_end: time):
-    day = EventsOrm(weekday=weekday, user_id=user_id, timetable_id = timetable_id, name = name, time_start=time_start, time_end=time_end)
+def add_event(weekday:int, user_id:int, timetable_id: int, body: str, time_start: time=None, time_end: time=None):
+    day = EventsOrm(weekday=weekday, user_id=user_id, timetable_id = timetable_id, body = body, time_start=time_start, time_end=time_end)
 
     with session_factory() as session:
         session.add(day)

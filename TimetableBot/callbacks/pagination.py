@@ -11,6 +11,8 @@ from data.orm import select_note, delete_note, select_timetable, select_events
 router = Router()
 
 
+add_timetable_text = "Для того чтобы добавить событие в расписание используйте команду: /addevent номер расписания день недели\(от 1 до 7\) Название занятия Кто преподаёт Время Аудитория"
+
 @router.callback_query(fabrics.Pagination.filter(F.action.in_(["timetables", "eventstoday"])))
 async def timetable_handler(call: CallbackQuery, callback_data: fabrics.Pagination):
     if callback_data.action == "timetables":
@@ -21,7 +23,7 @@ async def timetable_handler(call: CallbackQuery, callback_data: fabrics.Paginati
 @router.callback_query(fabrics.Table.filter(F.get.in_(["gettimetable"])))
 async def note_handler(call: CallbackQuery, callback_data: fabrics.Table):
     if callback_data.get == "gettimetable":
-        await call.message.edit_text(select_timetable(timetable_id=callback_data.id)[0][1])
+        await call.message.edit_text(f">*Расписание*: №{select_timetable(timetable_id=callback_data.id)[0][0]} {select_timetable(timetable_id=callback_data.id)[0][1]}\n>\n>{add_timetable_text}", parse_mode=ParseMode.MARKDOWN_V2)
         await call.message.edit_reply_markup(reply_markup=fabrics.showday(user_id=callback_data.user_id, timetable_id=callback_data.id))
 
 @router.callback_query(fabrics.Time_day.filter(F.dayweek.in_(["1", "2", "3", "4", "5", "6", "7"])))
