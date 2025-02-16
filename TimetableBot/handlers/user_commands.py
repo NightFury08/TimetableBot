@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, CommandObject, CommandStart
 
-from data.orm import add_user, select_timetables, add_event
+from data.orm import add_user, select_timetable, select_timetables, add_event
 
 from keyboards import reply
 
@@ -26,5 +26,6 @@ async def nametimeta(message: Message):
     timetable_id = split_text[0]
     weekday = split_text[1]
     body = message_text.lstrip(f"{split_text[0]} {split_text[1]}")
-    add_event(weekday=weekday, user_id=message.from_user.id, timetable_id=timetable_id, body=body)
-    await message.answer("Событие добавлено", reply_markup=reply.main)
+    if int(select_timetable(timetable_id=timetable_id)[0][2]) == int(message.from_user.id):
+        add_event(weekday=weekday, user_id=message.from_user.id, timetable_id=timetable_id, body=body)
+        await message.answer("Событие добавлено", reply_markup=reply.main)

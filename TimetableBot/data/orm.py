@@ -93,7 +93,7 @@ def select_timetable(timetable_id: int):
     with session_factory() as session:
         query = select(TimetablesOrm).where(TimetablesOrm.id == timetable_id)
         results = session.execute(query).scalars().all()
-        timetable = [[timetable.id, timetable.name] for timetable in results]
+        timetable = [[timetable.id, timetable.name, timetable.user_id] for timetable in results]
         print(timetable)
         return timetable
     
